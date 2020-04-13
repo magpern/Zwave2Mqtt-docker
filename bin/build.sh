@@ -7,8 +7,8 @@ set -e
 # Register quemu headers
 sudo docker run --rm --privileged multiarch/qemu-user-static:register
 
-Z2M_GIT_SHA1=d084fdf4eeb8287840b28d91e5714f7e537d166b
-OPENZWAVE_16_GIT_SHA1=14f2ba743ff5ce893f652cad3a86968e26f8ea10
+Z2M_GIT_SHA1=master
+OPENZWAVE_16_GIT_SHA1=master
 # OPENZWAVE_14_GIT_SHA1=449f89f063effb048f5dd6348d509a6c54fd942d
 
 wget -O package.json https://raw.githubusercontent.com/OpenZWave/Zwave2Mqtt/${Z2M_GIT_SHA1}/package.json
@@ -16,7 +16,7 @@ LATEST=$(node -p "require('./package.json').version")
 rm package.json
 
 # Build info
-REPO="robertslando"
+REPO="magpern"
 IMAGE_NAME="zwave2mqtt"
 VERSIONS="$LATEST"
 TARGET_ARCHES="arm32v6 arm32v7 arm64v8 arm64-v8 amd64"
@@ -58,14 +58,6 @@ for IMAGE_VERSION in ${VERSIONS}; do
 
   MANIFEST_VERSION="latest"
   OPENZWAVE_GIT_SHA1=${OPENZWAVE_16_GIT_SHA1}
-
-  # if [[ ${IMAGE_VERSION} == $LATEST ]]; then
-  #   MANIFEST_VERSION="latest"
-  #   OPENZWAVE_GIT_SHA1=${OPENZWAVE_14_GIT_SHA1}
-  # else
-  #   MANIFEST_VERSION="latest-dev"
-  #   OPENZWAVE_GIT_SHA1=${OPENZWAVE_16_GIT_SHA1}
-  # fi
 
   for docker_arch in ${TARGET_ARCHES}; do
       echo INFO: Creating Dockerfile for ${docker_arch}
