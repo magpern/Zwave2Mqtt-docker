@@ -29,7 +29,7 @@ createManifest() {
       rm -rf ~/.docker/manifests/docker.io_${REPO}_${IMAGE_NAME}-$1
   fi
 
-  docker manifest create --amend ${REPO}/${IMAGE_NAME}:$1 $3
+  docker --config ~/.docker manifest create --amend ${REPO}/${IMAGE_NAME}:$1 $3
 
   for docker_arch in ${TARGET_ARCHES}; do
     case ${docker_arch} in
@@ -40,11 +40,11 @@ createManifest() {
       arm64-v8 ) annotate_flags="--os linux --arch arm64 --variant v8" ;;
     esac
     echo INFO: Annotating arch: ${docker_arch} with \"${annotate_flags}\"
-    docker manifest annotate ${REPO}/${IMAGE_NAME}:$1 ${REPO}/${IMAGE_NAME}:${docker_arch}-$2 ${annotate_flags}
+    docker --config ~/.docker manifest annotate ${REPO}/${IMAGE_NAME}:$1 ${REPO}/${IMAGE_NAME}:${docker_arch}-$2 ${annotate_flags}
   done
 
   echo INFO: Pushing ${REPO}/${IMAGE_NAME}:$1
-  docker manifest push ${REPO}/${IMAGE_NAME}:$1
+  docker --config ~/.docker manifest push ${REPO}/${IMAGE_NAME}:$1
 }
 
 cd ..
